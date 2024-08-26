@@ -1,0 +1,6 @@
+[submodule "crosstool-ng"]
+	path = crosstool-ng
+	url = https://github.com/crosstool-ng/crosstool-ng.git
+[submodule "Mastering-Embedded-Linux-Programming-Third-Edition"]
+	path = Mastering-Embedded-Linux-Programming-Third-Edition
+	url = https://github.com/PacktPublishing/Mastering-Embedded-Linux-Programming-Third-Edition.git
