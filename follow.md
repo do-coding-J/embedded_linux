@@ -94,4 +94,20 @@ $ bin/ct-ng build
 ```
 - 빌드 된 툴체인은 ~/x-tools/arm-unknown-linux-gnueabi 에서 확인 가능하다
 
+#### 툴체인 구조
+- xtools의 경로를 추가해준다.
+```
+$ PATH=~/x-tools/arm-cortex_a8-linux-gnueabihf/bin/:$PATH 
+```
+- 간단한 [hello world](./ws/helloworld.c) 파일 만들고 컴파일
+```
+$ arm-cortex_a8-linux-gnueabihf-gcc helloworld.c -o helloworld
+```
+- 여기서 생긴 실행파일은 실행 못한다. 비글본 컴파일러로 컴파일 했기 때문에
+- 확인하는 방법은 Machine을 통해 알 수 있다.
+```
+$ arm-cortex_a8-linux-gnueabihf-readelf -a helloworld | grep Machine
+  Machine:                           ARM
+```
 
+#### 정적 링크와 동적 링크
