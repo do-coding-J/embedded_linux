@@ -111,3 +111,57 @@ $ arm-cortex_a8-linux-gnueabihf-readelf -a helloworld | grep Machine
 ```
 
 #### 정적 링크와 동적 링크
+- 정적 링크를 해보자 정적 링크는 -static을 사용해서 가능하다. 정적 링크를 하게 되면 용량이 엄청 크게 늘어난다.
+```
+$ arm-cortex_a8-linux-gnueabihf-gcc helloworld.c -static -o helloworld_static
+$ ls -l
+total 2484
+-rwxrwxr-x 1 rb rb   10780 Aug 26 11:38 helloworld
+-rw-rw-r-- 1 rb rb     119 Aug 26 11:37 helloworld.c
+-rwxrwxr-x 1 rb rb 2525028 Aug 26 13:18 helloworld_static
+```
+- 정적 링크는 .a 확장자를 사용한다. 또한 rc 옵션을 사용하여 아카이브화 한다.
+```
+$ touch test1.c
+$ touch test2.c
+$ arm-cortex_a8-linux-gnueabihf-gcc -c test1.c 
+$ arm-cortex_a8-linux-gnueabihf-gcc -c test2.c 
+$ arm-cortex_a8-linux-gnueabihf-ar rc libtest.a -o test1.o test2.o
+$ ls -l
+total 2496
+-rwxrwxr-x 1 rb rb   10780 Aug 26 11:38 helloworld
+-rw-rw-r-- 1 rb rb     119 Aug 26 11:37 helloworld.c
+-rwxrwxr-x 1 rb rb 2525028 Aug 26 13:18 helloworld_static
+-rw-rw-r-- 1 rb rb    1752 Aug 26 13:24 libtest.a
+-rw-rw-r-- 1 rb rb       0 Aug 26 13:21 test1.c
+-rw-rw-r-- 1 rb rb     780 Aug 26 13:22 test1.o
+-rw-rw-r-- 1 rb rb       0 Aug 26 13:21 test2.c
+-rw-rw-r-- 1 rb rb     780 Aug 26 13:22 test2.o
+```
+- -l (lib) 옵션을 사용해 링크가 가능하다
+```
+$ arm-cortex_a8-linux-gnueabihf-gcc helloworld.c -ltest -o helloworld_archive
+```
+
+- 공유 라이브러리를 만들 때는 -fPIC 옵션을 추가하여 컴파일 하고 -shared 옵션을 사용하여 링크 해야 한다. 이때 라이브러리의 확장자는 .so다.
+```
+$ arm-cortex_a8-linux-gnueabihf-gcc -fPIC -c test1.c
+$ arm-cortex_a8-linux-gnueabihf-gcc -fPIC -c test2.c
+$ arm-cortex_a8-linux-gnueabihf-gcc -shared -o libtest.so test1.o test2.o
+```
+
+- 빌드는 동일하게 사용한다.
+> 빌드가 안될 경우 LD_LIBRARY_PATH를 확인하라
+
+#### 버전
+- 동적 라이브러리는 코드를 공유한다. 그러다보니 A프로그램에서 8버전을 사용하지만 B프로그램에서 9버전을 사용한다면 어떻게 구분할까?
+- \${lib_name}.so.${version} 형식으로 관리한다.
+- 프로그램이 실행 될 때 그 버전의 링크를 찾아 코드를 실행한다.
+
+#### 기타 크로스 컴파일 툴...이 있다!
+- crosstool-ng
+- make
+- autotool
+- cmake
+- yocto
+- etc.....
