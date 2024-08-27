@@ -4,3 +4,6 @@
 [submodule "Mastering-Embedded-Linux-Programming-Third-Edition"]
 	path = Mastering-Embedded-Linux-Programming-Third-Edition
 	url = https://github.com/PacktPublishing/Mastering-Embedded-Linux-Programming-Third-Edition.git
+[submodule "u-boot"]
+	path = u-boot
+	url = git://git.denx.de/u-boot.git
