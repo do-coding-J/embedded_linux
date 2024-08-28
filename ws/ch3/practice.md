@@ -1,4 +1,5 @@
 ## 라즈베리파이 u-boot 빌드하기
+> http://www.wearedev.net/284?PHPSESSID=0be74ec2d642c13c2099d2da4a3ff974
 
 ### cross-ng로 컴파일러 빌드하기
 #### 1. 작업 환경 만들기
@@ -53,7 +54,7 @@ menuconfig에서 설정한다.
 ```
 $ bin/ct-ng menuconfig
 ```
-현재는 Paths and misc options -> Maximum log level -> DEBUG 만 설정  
+현재는 Paths and misc options -> Maximum log level to see -> DEBUG 만 설정  
 #### 4. build
 ```
 $ bin/ct-ng build
@@ -85,7 +86,52 @@ $ export ARCH=arm64
 $ export CROSS_COMPILE=$HOME/x-tools/aarch64-rpi3-linux-gnu/bin/aarch64-rpi3-linux-gnu-
 ```
 #### 8. uboot 빌드하기
-빌드 가능한 목록
+빌드 가능한 목록 u-boot/configs 에서 확인 가능 (라즈베리파이 3B+는 rpi_3_b_plus_defconfig)
 ```
-valid arguments are: cortex-a34 cortex-a35 cortex-a53 cortex-a57 cortex-a72 cortex-a73 thunderx thunderxt88p1 thunderxt88 octeontx octeontx81 octeontx83 thunderxt81 thunderxt83 ampere1 ampere1a ampere1b emag xgene1 falkor qdf24xx exynos-m1 phecda thunderx2t99p1 vulcan thunderx2t99 cortex-a55 cortex-a75 cortex-a76 cortex-a76ae cortex-a77 cortex-a78 cortex-a78ae cortex-a78c cortex-a65 cortex-a65ae cortex-x1 cortex-x1c neoverse-n1 ares neoverse-e1 octeontx2 octeontx2t98 octeontx2t96 octeontx2t93 octeontx2f95 octeontx2f95n octeontx2f95mm a64fx tsv110 thunderx3t110 neoverse-v1 zeus neoverse-512tvb saphira cortex-a57.cortex-a53 cortex-a72.cortex-a53 cortex-a73.cortex-a35 cortex-a73.cortex-a53 cortex-a75.cortex-a55 cortex-a76.cortex-a55 cortex-r82 cortex-a510 cortex-a520 cortex-a710 cortex-a715 cortex-a720 cortex-x2 cortex-x3 cortex-x4 neoverse-n2 cobalt-100 neoverse-v2 grace demeter generic generic-armv8-a generic-armv9-a
+$ make rpi_3_b_plus_defconfig
+$ make
+```
+
+#### 9. 라즈베리파이 펌웨어 받기 (디바이스 트리 기타 등등)
+```
+$ git clone https://github.com/raspberrypi/firmware.git
+$ cd firmware
+$ cp boot/bootcode.bin {sd boot}/.
+$ cp boot/start.elf {sd boot}/.
+$ cp boot/bcm2710-rpi-3-b-plus.dtb {sd boot}/.
+```
+
+#### 10. u-boot 복사
+```
+$ cp u-boot.bin {sd boot}/.
+```
+
+#### 11. config 파일 생성
+```
+cat << EOF > {sd boot}/config.txt
+enable_uart=1
+arm_64bit=1
+kernel=u-boot.bin
+EOF
+```
+
+#### 성공
+```
+U-Boot 2021.01 (Aug 28 2024 - 16:35:34 +0900)
+
+DRAM:  128 MiB
+RPI 3 Model B+ (0xa020d3)
+MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
+Loading Environment from FAT... *** Warning - bad CRC, using default environment
+
+In:    serial
+Out:   vidconsole
+Err:   vidconsole
+Net:   No ethernet found.
+starting USB...
+Bus usb@7e980000: USB DWC2
+scanning bus usb@7e980000 for devices... 4 USB Device(s) found
+       scanning usb for storage devices... 0 Storage Device(s) found
+Hit any key to stop autoboot:  0 
+U-Boot>  
 ```
