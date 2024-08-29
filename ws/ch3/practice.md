@@ -94,6 +94,7 @@ $ make
 
 #### 9. 라즈베리파이 펌웨어 받기 (디바이스 트리 기타 등등)
 ```
+$ mkdir rpi && cd rpi
 $ git clone https://github.com/raspberrypi/firmware.git
 $ cd firmware
 $ cp boot/bootcode.bin {sd boot}/.

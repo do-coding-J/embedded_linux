@@ -7,6 +7,9 @@
 [submodule "u-boot"]
 	path = u-boot
 	url = git://git.denx.de/u-boot.git
-[submodule "firmware"]
-	path = firmware
+[submodule "rpi/linux"]
+	path = rpi/linux
+	url = https://github.com/raspberrypi/linux.git
+[submodule "rpi/firmware"]
+	path = rpi/firmware
 	url = https://github.com/raspberrypi/firmware.git
