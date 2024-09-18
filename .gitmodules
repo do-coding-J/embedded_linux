@@ -19,3 +19,6 @@
 [submodule "buildroot"]
 	path = buildroot
 	url = https://github.com/buildroot/buildroot.git
+[submodule "poky"]
+	path = poky
+	url = https://github.com/yoctoproject/poky.git
